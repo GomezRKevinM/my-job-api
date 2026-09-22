@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.Data;
 
+import java.sql.Timestamp;
 import java.util.UUID;
 
 @Data
@@ -34,4 +35,10 @@ public class User {
 
     @Column(nullable = false)
     private String role;
+
+    @Column(nullable = false, updatable = false)
+    private Timestamp created_at;
+
+    @Column(nullable = false)
+    private Timestamp updated_at;
 }

@@ -3,8 +3,8 @@ package com.tecnil.my_job_api.service;
 import com.tecnil.my_job_api.entity.User;
 import com.tecnil.my_job_api.enums.UserRole;
 import com.tecnil.my_job_api.repository.UserRepository;
+import com.tecnil.my_job_api.utils.BCrypt;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -13,6 +13,7 @@ import java.util.UUID;
 @Service
 public class UserService {
     private final UserRepository repository;
+
 
     public UserService(final UserRepository repository) {
         this.repository = repository;
@@ -32,6 +33,11 @@ public class UserService {
         user.setCreated_at(new Timestamp(System.currentTimeMillis()));
         user.setUpdated_at(new Timestamp(System.currentTimeMillis()));
 
+        user.setPassword(encodePassword(user.getPassword()));
         return repository.save(user);
+    }
+
+    private String encodePassword(String pass){
+        return BCrypt.encode(pass);
     }
 }

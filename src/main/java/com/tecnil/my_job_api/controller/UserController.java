@@ -20,18 +20,17 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping
+    @PostMapping("")
     public ResponseEntity<User> create (@Valid @RequestBody User user){
-        return ResponseEntity.created(URI.create("/api/v1/user")).body(userService.create(user));
+        User newUser = userService.create(user);
+        return ResponseEntity.created(URI.create("/api/v1/user")).body(newUser);
     }
 
-    @GetMapping
+    @GetMapping("")
     public ResponseEntity<List<User>> getAll(){
         List<User> users = userService.findAll();
-        if (users.isEmpty()) {
-            return  ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(userService.findAll());
+
+        return ResponseEntity.ok(users);
     }
 
     @GetMapping("/{id}")

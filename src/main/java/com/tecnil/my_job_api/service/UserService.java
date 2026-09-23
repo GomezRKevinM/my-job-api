@@ -22,20 +22,20 @@ public class UserService{
     }
 
     public User create(@Valid User user){
-        if(user == null){
-            throw  new IllegalArgumentException();
+        if (user == null ||
+                user.getUsername() == null || user.getUsername().isBlank() ||
+                user.getEmail() == null || user.getEmail().isBlank() ||
+                user.getPassword() == null || user.getPassword().isBlank() ||
+                user.getPhone() == null || user.getPhone().isBlank() ||
+                user.getName() == null || user.getName().isBlank()) {
+            throw new IllegalArgumentException("Todos los campos obligatorios deben estar presentes");
         }
-        if(user.getEmail().isEmpty()){ throw   new IllegalArgumentException();}
-        if(user.getName().isEmpty()){ throw  new IllegalArgumentException();}
-        if(user.getPassword().isEmpty()){ throw  new IllegalArgumentException();}
-        if(user.getPhone().isEmpty()){ throw  new IllegalArgumentException();}
 
-        user.setUser_id(UUID.randomUUID());
         user.setRole(UserRole.current.name());
         user.setCreated_at(new Timestamp(System.currentTimeMillis()));
         user.setUpdated_at(new Timestamp(System.currentTimeMillis()));
-
         user.setPassword(encodePassword(user.getPassword()));
+
         return repository.save(user);
     }
 

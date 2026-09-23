@@ -64,7 +64,12 @@ public class UserService{
     }
 
     public User update(@Valid User user, String id){
-        User old = repository.findById(UUID.fromString(id)).get();
+        User old = repository.findById(UUID.fromString(id)).orElse(null);
+
+        if (old == null){
+            throw new IllegalArgumentException();
+        }
+
         old.setName(user.getName());
         old.setEmail(user.getEmail());
         old.setPhone(user.getPhone());

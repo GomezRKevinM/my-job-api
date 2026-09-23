@@ -8,10 +8,12 @@ import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class UserService {
+public class UserService{
     private final UserRepository repository;
 
 
@@ -35,6 +37,49 @@ public class UserService {
 
         user.setPassword(encodePassword(user.getPassword()));
         return repository.save(user);
+    }
+
+    public List<User> findAll(){
+        return repository.findAll();
+    }
+
+    public Optional<User> findByUsername(String username){
+        return  repository.findByUsername(username);
+    }
+
+    public  Optional<User> findById(UUID id){
+        return repository.findById(id);
+    }
+
+    public Optional<User> findByEmail(String email){
+        return repository.findByEmail(email);
+    }
+
+    public  Optional<User> findByPhone(String phone){
+        return repository.findByPhone(phone);
+    }
+
+    public Optional<List<User>> findByRole(String role){
+        return repository.findByRole(role);
+    }
+
+    public User update(@Valid User user, String id){
+        User old = repository.findById(UUID.fromString(id)).get();
+        old.setName(user.getName());
+        old.setEmail(user.getEmail());
+        old.setPhone(user.getPhone());
+        old.setPassword(encodePassword(user.getPassword()));
+        old.setUpdated_at(new Timestamp(System.currentTimeMillis()));
+        old.setRole(user.getRole());
+        old.setUsername(user.getUsername());
+
+        return  repository.save(old);
+    }
+
+    public void delete(String id){
+        if (repository.existsById(UUID.fromString(id))){
+            repository.deleteById(UUID.fromString(id));
+        }else throw  new IllegalArgumentException();
     }
 
     private String encodePassword(String pass){

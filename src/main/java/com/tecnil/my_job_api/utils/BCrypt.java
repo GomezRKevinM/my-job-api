@@ -14,7 +14,7 @@ public class BCrypt {
      * @return El hash generado para guardar en la base de datos.
      */
     public static String encode(String rawPassword) {
-        if (rawPassword == null || rawPassword.isEmpty()) {
+        if (rawPassword == null || rawPassword.isBlank()) {
             throw new IllegalArgumentException("La contraseña no puede estar vacía");
         }
         return encoder.encode(rawPassword);
